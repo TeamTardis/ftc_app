@@ -14,11 +14,10 @@ import com.qualcomm.robotcore.util.ElapsedTime; //Imports com.qualcomm.robotcore
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit; //Imports org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit 
 
 /**
- * Created by Corning Robotics on 12/21/16.
+ * Created by Corning Robotics on 12/21/16. *
  **/
 
-public abstract class TardisOpMode extends OpMode { //Imports presets for initiation from OpMode
-
+public abstract class TardisOpModeAutonomous extends OpMode { //Imports presets for initiation from OpMode
     DcMotor m1; //Define dcMotor as m1
     DcMotor m2; //Define dcMotor as m2
     DcMotor m3; //Define dcMotor as m3
@@ -42,10 +41,10 @@ public abstract class TardisOpMode extends OpMode { //Imports presets for initia
 
     @Override //Method overrides parent class
     public void init() { //Start of the initiation for autonomous
-        m1 = hardwareMap.dcMotor.get("m1"); //Sets m1 to m1 in the config
-        m2 = hardwareMap.dcMotor.get("m2"); //Sets m2 to m2 in the config
-        m3 = hardwareMap.dcMotor.get("m3"); //Sets m3 to m3 in the config
-        m4 = hardwareMap.dcMotor.get("m4"); //Sets m4 to m4 in the config
+        m1 = hardwareMap.dcMotor.get("m3"); //Sets m1 to m3 in the config
+        m2 = hardwareMap.dcMotor.get("m1"); //Sets m2 to m1 in the config
+        m3 = hardwareMap.dcMotor.get("m4"); //Sets m3 to m4 in the config
+        m4 = hardwareMap.dcMotor.get("m2"); //Sets m4 to m2 in the config
         m5 = hardwareMap.dcMotor.get("m5"); //Sets m5 to m5 in the config
         m6 = hardwareMap.dcMotor.get("m6"); //Sets m6 to m6 in the config
         m7 = hardwareMap.dcMotor.get("m7"); //Sets m7 to m7 in the config
@@ -73,8 +72,8 @@ public abstract class TardisOpMode extends OpMode { //Imports presets for initia
         colorSensor = hardwareMap.colorSensor.get("c1"); //Sets colorSensor to c1 in the config
         colorSensor.enableLed(false); //Turns Color Sensor LED off
 
-        m5.setMaxSpeed(1600); //Sets max speed of m5 to 1600
-        m6.setMaxSpeed(1600); //Sets max speed of m6 to 1600
+        m5.setMaxSpeed(1750);  //Set max speed medium for shooter
+        m6.setMaxSpeed(1600);
 
         touchSensor1 = hardwareMap.touchSensor.get("t1"); //Sets touchSensor1 to t1 in the config
         I2cAddr t1 = I2cAddr.create8bit(0x60); //Changes I2c Address to 0x60
@@ -86,5 +85,13 @@ public abstract class TardisOpMode extends OpMode { //Imports presets for initia
 
         s1.setPosition(0.5); //Raises the linear actuator
         s3.setPosition(0.45); //Fits the mast forks inside the 18 by 18 by 18 inch square
-    }
-}
+
+        gyro.calibrate(); //Calibrate the gyro sensor
+        while (gyro.isCalibrating()) { //Adds telemetry for gyro calibration
+            telemetry.addData("<", "Gyro calibrating..."); //Tells the user the gyro is calibrating
+            telemetry.update(); //Updates telemetry
+        } //End of while statement
+        telemetry.addData("<", "Gyro calibrated, good luck!"); //Tells the user the gyro has finished calibrating
+        telemetry.update(); //Updates telemetry
+    } //Ends initiation
+} //End of program
