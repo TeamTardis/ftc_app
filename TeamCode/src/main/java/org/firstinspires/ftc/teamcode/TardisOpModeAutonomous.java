@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode; //Use the package org.firstinspires.ftc.teamcode
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor; //Import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.ColorSensor; //Import com.qualcomm.robotcore.hardware.ColorSensor for the color sensors
 import com.qualcomm.robotcore.hardware.DcMotor; //Import com.qualcomm.robotcore.hardware.DcMotor for motors
 import com.qualcomm.robotcore.hardware.GyroSensor; //Import com.qualcomm.robotcore.hardware.GyroSensor for the gyro sensor
@@ -36,7 +37,7 @@ public abstract class TardisOpModeAutonomous extends OpMode { //Imports presets 
     ColorSensor colorSensor2; //Define color sensor as colorSensor2
     OpticalDistanceSensor odsSensor1; //Define optical distance sensor as odsSensor1
     OpticalDistanceSensor odsSensor2; //Define optical distance sensor as odsSensor2
-    GyroSensor gyro; //Define gyro sensor as gyro
+    ModernRoboticsI2cGyro gyro;; //Define gyro sensor as gyro
     ModernRoboticsI2cRangeSensor range; //Define range sensor as range
 
     @Override //Method overrides parent class
@@ -72,7 +73,7 @@ public abstract class TardisOpModeAutonomous extends OpMode { //Imports presets 
         colorSensor = hardwareMap.colorSensor.get("c1"); //Sets colorSensor to c1 in the config
         colorSensor.enableLed(false); //Turns Color Sensor LED off
 
-        m5.setMaxSpeed(1750);  //Set max speed medium for shooter
+        m5.setMaxSpeed(1600);  //Set max speed medium for shooter
         m6.setMaxSpeed(1600);
 
         touchSensor1 = hardwareMap.touchSensor.get("t1"); //Sets touchSensor1 to t1 in the config
@@ -81,7 +82,7 @@ public abstract class TardisOpModeAutonomous extends OpMode { //Imports presets 
         touchSensor2 = hardwareMap.touchSensor.get("t2"); //Sets touchSensor2 to t2 in the config
         I2cAddr t2 = I2cAddr.create8bit(0x69); //Changes I2c Address to 0x69
 
-        gyro = hardwareMap.gyroSensor.get("gyro"); //Sets gyro to gyro in the config
+        gyro = (ModernRoboticsI2cGyro) hardwareMap.gyroSensor.get("gyro"); //Sets gyro to gyro in the config
 
         s1.setPosition(0.5); //Raises the linear actuator
         s3.setPosition(0.45); //Fits the mast forks inside the 18 by 18 by 18 inch square
