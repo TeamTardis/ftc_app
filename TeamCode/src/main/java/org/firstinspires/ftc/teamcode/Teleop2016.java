@@ -28,6 +28,7 @@ import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "TeleOp-2016", group = "TeleOp")
+@Disabled
 public class Teleop2016 extends OpMode {
     DcMotor m1;
     DcMotor m2;
