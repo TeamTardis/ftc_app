@@ -7,15 +7,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-import static org.firstinspires.ftc.teamcode.Teleop2017.steps.COLOR_FIND;
-import static org.firstinspires.ftc.teamcode.Teleop2017.steps.FORWARD;
-import static org.firstinspires.ftc.teamcode.Teleop2017.steps.NORMAL_DRIVE;
-import static org.firstinspires.ftc.teamcode.Teleop2017.steps.PUSH;
-import static org.firstinspires.ftc.teamcode.Teleop2017.steps.ROTATE;
-import static org.firstinspires.ftc.teamcode.Teleop2017.steps.SHOOT_BALL;
-import static org.firstinspires.ftc.teamcode.Teleop2017.steps.STOP;
-import static org.firstinspires.ftc.teamcode.Teleop2017.steps.WHITE_LINE;
-
 @TeleOp(name = "TeleOp-2017", group = "TeleOp")
 public class Teleop2017 extends TardisOpMode { //Init code in separate program
 
@@ -30,7 +21,7 @@ public class Teleop2017 extends TardisOpMode { //Init code in separate program
         SHOOT_BALL
     }
 
-    public Teleop2017.steps CURRENT_STEP = NORMAL_DRIVE; //Sets the variable CURRENT_STEP to the first step in the sequence
+    public steps CURRENT_STEP = steps.NORMAL_DRIVE; //Sets the variable CURRENT_STEP to the first step in the sequence
 
     //Toggle Boolean states
     boolean sweeperCurr = false; //Toggle sweeper current state
@@ -55,8 +46,7 @@ public class Teleop2017 extends TardisOpMode { //Init code in separate program
     @Override
     public void loop() {
 
-
-        telemetry.addData(">", "Color Red (Ground): " + colorSensor2.red() + "\nColor Blue (Ground): " + colorSensor2.blue() + "\nzValue: " + gyro.getIntegratedZValue() + "\nShooter Speed", shooterSpeed); //Adds telemetry to debug
+        telemetry.addData(">", "Color Red (Ground): " + colorSensor2.red() + "\nColor Blue (Ground): " + colorSensor2.blue() + "\nzValue: " + gyro.getIntegratedZValue() + "\nShooter Speed" + shooterSpeed); //Adds telemetry to debug
         telemetry.update(); //Updates telemetry with new information
 
         LUD = gamepad1.left_stick_y;   //(Game pad 1)
@@ -64,7 +54,6 @@ public class Teleop2017 extends TardisOpMode { //Init code in separate program
         R = gamepad1.right_stick_x;    //(Game pad 1)
         LUD2 = gamepad2.left_stick_y;  //(Game pad 2)
         RUD = -gamepad2.right_stick_y; //(Game pad 2)
-
 
         //Check status of right bumper (Game pad 1)
         shooterCurr = gamepad1.left_bumper;
@@ -82,9 +71,8 @@ public class Teleop2017 extends TardisOpMode { //Init code in separate program
                 m6.setPower(0.1);
             }
         }
+
         shooterPrev = shooterCurr; //Sets back to toggleable state
-
-
 
         if (gamepad1.y)  {
             m5.setMaxSpeed(1850);  //Set max speed high for shooter
@@ -102,13 +90,10 @@ public class Teleop2017 extends TardisOpMode { //Init code in separate program
             shooterSpeed = 1; //Shooter speed variable = 1
         }
 
-
-
         //If the joystick button is pressed, move the servo (Game pad 2)
         if (gamepad2.right_stick_button) {
             s1.setPosition(RUD/3 + 0.2); //Linear actuator based on joystick inputs
         }
-
 
         //If the left trigger is pressed hold servos up (Game pad2)
         if (gamepad2.left_trigger == 1) {
@@ -159,9 +144,9 @@ public class Teleop2017 extends TardisOpMode { //Init code in separate program
 
         if (gamepad1.left_trigger == 1) {
             runtime.reset();
-            CURRENT_STEP = SHOOT_BALL;
+            CURRENT_STEP = steps.SHOOT_BALL;
         }
-        if (gamepad1.b) {
+        /*if (gamepad1.b) {
             CURRENT_STEP = ROTATE;
             beaconSelect = 0;
         }
@@ -169,8 +154,9 @@ public class Teleop2017 extends TardisOpMode { //Init code in separate program
             CURRENT_STEP = ROTATE;
             beaconSelect = 1;
         }
-        if(CURRENT_STEP != NORMAL_DRIVE && R > threshold || R < -threshold || LRL > threshold || LRL < -threshold || LUD > threshold || LUD < -threshold) {
-            CURRENT_STEP = NORMAL_DRIVE;
+        */
+        if(CURRENT_STEP != steps.NORMAL_DRIVE && R > threshold || R < -threshold || LRL > threshold || LRL < -threshold || LUD > threshold || LUD < -threshold) {
+            CURRENT_STEP = steps.NORMAL_DRIVE;
         }
 
         switch (CURRENT_STEP) {
@@ -180,7 +166,6 @@ public class Teleop2017 extends TardisOpMode { //Init code in separate program
                 //If no buttons are pressed, control normal
                 //If R is not used,then use left Stick (R overrides L)
                 if (gamepad1.right_trigger == 0) {
-
                     if (R == 0) {
                         //Controls for Left Stick
                         m1.setPower((LRL + LUD) / 2);   //Motor1 is x-axis plus y-axis
@@ -192,10 +177,10 @@ public class Teleop2017 extends TardisOpMode { //Init code in separate program
                     //If R is Outside the threshold, then rotate on the direction of Right Stick
                     if (R > threshold || R < -threshold) {
                         //Controls for Right Stick
-                        m1.setPower(-R / 2); //Set power to negative x-axis (orientation)
-                        m2.setPower(R / 2); //Set power to positive x-axis
-                        m3.setPower(-R / 2); //Set power to negative x-axis (orientation)
-                        m4.setPower(R / 2); //Set power to positive x-axis
+                        m1.setPower(R / 2); //Set power to negative x-axis (orientation)
+                        m2.setPower(-R / 2); //Set power to positive x-axis
+                        m3.setPower(R / 2); //Set power to negative x-axis (orientation)
+                        m4.setPower(-R / 2); //Set power to positive x-axis
                         break;
                     }
 
@@ -205,24 +190,25 @@ public class Teleop2017 extends TardisOpMode { //Init code in separate program
                     //If R is not used,then use left Stick (R overrides L)
                     if (R == 0) {
                         //Controls for Left Stick
-                        m1.setPower((LRL + LUD) / 8);   //Motor1 is x-axis plus y-axis
-                        m2.setPower((LUD - LRL) / 8);   //Motor2 is x-axis minus y-axis
-                        m3.setPower((LUD - LRL) / 8);   //Motor3 is x-axis minus y axis(parallel to M2)
-                        m4.setPower((LRL + LUD) / 8);   //Motor4 is x-axis plus y-axis(parallel to M1)
+                        m1.setPower((LRL + LUD) / 4);   //Motor1 is x-axis plus y-axis
+                        m2.setPower((LUD - LRL) / 4);   //Motor2 is x-axis minus y-axis
+                        m3.setPower((LUD - LRL) / 4);   //Motor3 is x-axis minus y axis(parallel to M2)
+                        m4.setPower((LRL + LUD) / 4);   //Motor4 is x-axis plus y-axis(parallel to M1)
                         break;
                     }
                     //If R is Outside the threshold, then rotate on the direction of Right Stick
                     if (R > threshold || R < -threshold) {
                         //Controls for Right Stick
-                        m1.setPower(-R / 6);    //Set power to negative x-axis (orientation)
-                        m2.setPower(R / 6);     //Set power to positive x-axis
-                        m3.setPower(-R / 6);    //Set power to negative x-axis (orientation)
-                        m4.setPower(R / 6);     //Set power to positive x-axis
+                        m1.setPower(R / 6);    //Set power to negative x-axis (orientation)
+                        m2.setPower(-R / 6);     //Set power to positive x-axis
+                        m3.setPower(R / 6);    //Set power to negative x-axis (orientation)
+                        m4.setPower(-R / 6);     //Set power to positive x-axis
                         break;
                     }
                     //If nothing at all is happening, do nothing
                     break;
                 }
+                break;
 
             case SHOOT_BALL:
 
@@ -231,11 +217,10 @@ public class Teleop2017 extends TardisOpMode { //Init code in separate program
                     break;
                 } else {
                     s2.setPosition(.05);
-                    CURRENT_STEP = NORMAL_DRIVE;
+                    CURRENT_STEP = steps.NORMAL_DRIVE;
                     break;
                 }
-
-
+            /*
             case ROTATE:
 
                 ///////
@@ -378,7 +363,7 @@ public class Teleop2017 extends TardisOpMode { //Init code in separate program
                 m2.setPower(.4); //Sets motor 2 to power .4 to go forward to push button
                 m3.setPower(.4); //Sets motor 3 to power .4 to go forward to push button
                 m4.setPower(-.4); //Sets motor 4 to power .4 to go forward to push button
-                break; //Exits switch statement
+                break; //Exits switch statement */
         }
     } //Void loop end
 } //OpMode loop end

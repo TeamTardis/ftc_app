@@ -428,7 +428,7 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
 
             case FIND_CORRECT_COLOR_BEACON_ONE: //Beginning of case statement FIND_CORRECT_COLOR_BEACON_ONE
 
-                if (colorSensor.blue() > 1.5) { //Moves right until red is found
+                if (colorSensor.blue() > 30) { //Moves right until red is found
                     m1.setPower(0); //Sets motor 1 to power 0 before next step
                     m2.setPower(0); //Sets motor 2 to power 0 before next step
                     m3.setPower(0); //Sets motor 3 to power 0 before next step
@@ -625,7 +625,7 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
 
             case FIND_CORRECT_COLOR_BEACON_TWO: //Beginning of case statement FIND_CORRECT_COLOR_BEACON_TWO
 
-                if (colorSensor.blue() > 1.5) { //Moves right until red is found
+                if (colorSensor.blue() > 30) { //Moves right until red is found
                     m1.setPower(0); //Sets motor 1 to power 0 before next step
                     m2.setPower(0); //Sets motor 2 to power 0 before next step
                     m3.setPower(0); //Sets motor 3 to power 0 before next step
