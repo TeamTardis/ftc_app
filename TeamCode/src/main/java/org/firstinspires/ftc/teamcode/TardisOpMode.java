@@ -73,8 +73,8 @@ public abstract class TardisOpMode extends OpMode { //Imports presets for initia
         colorSensor2 = (ModernRoboticsI2cColorSensor) hardwareMap.colorSensor.get("c1"); //Sets colorSensor to c2 in the config
         colorSensor2.enableLed(true); //Turns Color Sensor LED on
 
-        m5.setMaxSpeed(1600); //Sets max speed of m5 to 1600
-        m6.setMaxSpeed(1600); //Sets max speed of m6 to 1600
+        m5.setMaxSpeed(1000); //Sets max speed of m5 to 1600
+        m6.setMaxSpeed(1000); //Sets max speed of m6 to 1600
 
         touchSensor1 = hardwareMap.touchSensor.get("t1"); //Sets touchSensor1 to t1 in the config
         I2cAddr t1 = I2cAddr.create8bit(0x60); //Changes I2c Address to 0x60

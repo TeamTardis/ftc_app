@@ -55,7 +55,6 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
         START_RESET,
         MOVE_AWAY_FROM_WALL, //[Step 1] Moves away from starting wall to prepare for rotation
         ROTATE_TO_VORTEX, //[Step 2] Rotate about 50° counter-clockwise to face launcher at center vortex
-        SPEED_UP_SHOOTERS, //[Step 3] Speeds up launcher motors to proper launching speed (Max speed = 1600 (see TardisOpModeAutonomous for more information))
         SHOOT_FIRST_BALL, //[Step 4] Shoot first ball by lifting ball using launching servo
         LOWER_SERVO_1, //[Step 5] Lowers launching servo (resets it to original position)
         SHOOT_SECOND_BALL, //[Step 6] Shoot second ball by lifting ball using launching servo
@@ -76,13 +75,16 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
         PUSH_BUTTON_BEACON_TWO, //[Step 21] Once correct color is found, drive forward to select color
         BACK_OFF_BEACON_TWO, //[Step 22] After button press, drive backward
         HIT_CAP_BALL, //[Step 23] Drive diagonally backward using motor 1, motor 4 and gyro sensor to hit cap ball off the base of the center vortex and park there
+        ROTATE,
         STOP, //The title says it all
 
         ////////////////////////////////////////////////////////////////////////////////////////////////
-        //Backup steps - These steps run in case there is an unexpected sensor reading or none at all.//
+        //Contingency steps - These steps run in case there is an unexpected sensor reading or none at all.//
         ////////////////////////////////////////////////////////////////////////////////////////////////
 
         RANGE_READJUST,
+        RANGE_READJUST_BEACON_ONE,
+        RANGE_READJUST_BEACON_TWO
 
     } //End of steps for autonomous
 
@@ -97,7 +99,7 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
         //Telemetry for debugging//
         ///////////////////////////
 
-        telemetry.addData(">", "Range (CM): " + range.getDistance(DistanceUnit.CM) + "\nzValue: " + gyro.getIntegratedZValue() + "\nBlue: " + colorSensor.blue() + "\nRuntime variable: " + runtime + "\nStep: " + CURRENT_STEP); //Adds telemetry to debug
+        telemetry.addData("", "Range (CM): " + range.getDistance(DistanceUnit.CM) + "\nzValue: " + gyro.getIntegratedZValue() + "\nBlue: " + colorSensor.blue() + "\nRuntime variable: " + runtime + "\nStep: " + CURRENT_STEP); //Adds telemetry to debug
         telemetry.update(); //Updates telemetry with new information
 
         /////////////////////////////
@@ -147,13 +149,13 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
 
             case ROTATE_TO_VORTEX: //Beginning of case statement ROTATE_TO_VORTEX
 
-                if (gyro.getIntegratedZValue() > 20) { //Rotates robot about 20° clockwise so the launcher faces the center vortex
+                if (gyro.getIntegratedZValue() > 18) { //Rotates robot about 20° clockwise so the launcher faces the center vortex
                     m1.setPower(0); //Sets motor 1 to power 0 before next step
                     m2.setPower(0); //Sets motor 2 to power 0 before next step
                     m3.setPower(0); //Sets motor 3 to power 0 before next step
                     m4.setPower(0); //Sets motor 4 to power 0 before next step
                     runtime.reset(); //Resets time before switching to next step
-                    CURRENT_STEP = steps.SPEED_UP_SHOOTERS; //Sets next step to SPEED_UP_SHOOTERS
+                    CURRENT_STEP = steps.SHOOT_FIRST_BALL; //Sets next step to SPEED_UP_SHOOTERS
                     break; //Exits switch statement
                 } //End of if statement
                 m1.setPower(-.1); //Sets motor 1 to power .1 to rotate the robot clockwise
@@ -162,32 +164,13 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
                 m4.setPower(.1); //Sets motor 4 to power -.1 to rotate the robot clockwise
                 break; //Exits switch statement
 
-            //////////////////////////////
-            //Step 3 [SPEED_UP_SHOOTERS]//
-            //////////////////////////////
-
-            case SPEED_UP_SHOOTERS: //Beginning of case statement SPEED_UP_SHOOTERS
-
-                if (runtime.seconds() > 2.5) { //Sets power of launcher motors to 1 with their max speed set to 1600 (see TardisOpModeAutonomous) for 2.5 seconds
-                    m1.setPower(0); //Sets motor 1 to power 0 before next step
-                    m2.setPower(0); //Sets motor 2 to power 0 before next step
-                    m3.setPower(0); //Sets motor 3 to power 0 before next step
-                    m4.setPower(0); //Sets motor 4 to power 0 before next step
-                    runtime.reset(); //Resets time before switching to next step
-                    CURRENT_STEP = steps.SHOOT_FIRST_BALL; //Sets next step to SHOOT_FIRST_BALL
-                    break; //Exits switch statement
-                } //End of if statement
-                m5.setPower(1); //Sets launcher motor 5 to 1 to prepare to shoot ball
-                m6.setPower(1); //Sets launcher motor 6 to 1 to prepare to shoot ball
-                break; //Exits switch statement
-
             /////////////////////////////
             //Step 4 [SHOOT_FIRST_BALL]//
             /////////////////////////////
 
             case SHOOT_FIRST_BALL: //Beginning of case statement SHOOT_FIRST_BALL
 
-                if (runtime.seconds() > .5) { //Raises ball into launcher by setting servo position to launching position for 1 second
+                if (runtime.seconds() > .3) { //Raises ball into launcher by setting servo position to launching position for 1 second
                     m1.setPower(0); //Sets motor 1 to power 0 before next step
                     m2.setPower(0); //Sets motor 2 to power 0 before next step
                     m3.setPower(0); //Sets motor 3 to power 0 before next step
@@ -205,7 +188,7 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
 
             case LOWER_SERVO_1: //Beginning of case statement LOWER_SERVO_1
 
-                if (runtime.seconds() > 2.5) { //Lowers launching servo to original position for 1.5 seconds
+                if (runtime.seconds() > 1.5) { //Lowers launching servo to original position for 1.5 seconds
                     m1.setPower(0); //Sets motor 1 to power 0 before next step
                     m2.setPower(0); //Sets motor 2 to power 0 before next step
                     m3.setPower(0); //Sets motor 3 to power 0 before next step
@@ -223,7 +206,7 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
 
             case SHOOT_SECOND_BALL: //Beginning of case statement SHOOT_SECOND_BALL
 
-                if (runtime.seconds() > .5) { //Raises ball into launcher by setting servo position to launching position for 1 second
+                if (runtime.seconds() > .3) { //Raises ball into launcher by setting servo position to launching position for 1 second
                     m1.setPower(0); //Sets motor 1 to power 0 before next step
                     m2.setPower(0); //Sets motor 2 to power 0 before next step
                     m3.setPower(0); //Sets motor 3 to power 0 before next step
@@ -266,7 +249,7 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
 
             case STRAIGHTEN_ON_WALL: //Beginning of case statement STRAIGHTEN_ON_WALL
 
-                if (runtime.seconds() > 1) { //Moves back to starting wall, pushing up against it to align with it for 1 second
+                if (runtime.seconds() > .5) { //Moves back to starting wall, pushing up against it to align with it for 1 second
                     m1.setPower(0); //Sets motor 1 to power 0 before next step
                     m2.setPower(0); //Sets motor 2 to power 0 before next step
                     m3.setPower(0); //Sets motor 3 to power 0 before next step
@@ -298,15 +281,15 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
                 } //End of if statement
                 if (gyro.getIntegratedZValue() < -90) { //If gyro senses a tilt, it lowers the speed of motor 1 to correct itself
                     m1.setPower(0); //Sets motor 1 to power .8 to go diagonally toward beacon one
-                    m2.setPower(.8); //Sets motor 2 to power 0 to go diagonally toward beacon one
-                    m3.setPower(1); //Sets motor 3 to power 0 to go diagonally toward beacon one
+                    m2.setPower(1); //Sets motor 2 to power 0 to go diagonally toward beacon one
+                    m3.setPower(.8); //Sets motor 3 to power 0 to go diagonally toward beacon one
                     m4.setPower(0); //Sets motor 4 to power 1 to go diagonally toward beacon one
                     break; //Exits switch statement
                 } //End of if statement
                 if (gyro.getIntegratedZValue() > -90) { //If gyro senses a tilt, it lowers the speed of motor 4 to correct itself
                     m1.setPower(0); //Sets motor 1 to power 1 to go diagonally toward beacon one
-                    m2.setPower(1); //Sets motor 2 to power 0 to go diagonally toward beacon one
-                    m3.setPower(.8); //Sets motor 3 to power 0 to go diagonally toward beacon one
+                    m2.setPower(.8); //Sets motor 2 to power 0 to go diagonally toward beacon one
+                    m3.setPower(1); //Sets motor 3 to power 0 to go diagonally toward beacon one
                     m4.setPower(0); //Sets motor 4 to power .8 to go diagonally toward beacon one
                     break; //Exits switch statement
                 } //End of if statement
@@ -327,9 +310,13 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
                     m3.setPower(0); //Sets motor 3 to power 0 before next step
                     m4.setPower(0); //Sets motor 4 to power 0 before next step
                     runtime.reset(); //Resets time before switching to next step
-                    CURRENT_STEP = steps.FIND_WHITE_LINE_BEACON_ONE; //Sets next step to FIND_WHITE_LINE_BEACON_ONE
+                    CURRENT_STEP = steps.MOVE_CLOSER_TO_BEACON_ONE; //Sets next step to FIND_WHITE_LINE_BEACON_ONE
                     break; //Exits switch statement
                 } //End of if statement
+                if (runtime.seconds() > 4) {
+                    CURRENT_STEP = steps.NEXT_BEACON_STEP_TWO;
+                    break;
+                }
                 if (gyro.getIntegratedZValue() < -90) { //If gyro senses a tilt, it lowers the speed of motor 1 to correct itself
                     m1.setPower(0); //Sets motor 1 to power .8 to go diagonally toward beacon one
                     m2.setPower(.3); //Sets motor 2 to power 0 to go diagonally toward beacon one
@@ -352,7 +339,7 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
                     break; //Exits switch statement
                 } //End of if statement
 
-                /////////////////////////////////////////////
+  /**              /////////////////////////////////////////////
                 //Step 11 [FIND_WHITE_LINE_BEACON_ONE]//
                 /////////////////////////////////////////////
 
@@ -368,17 +355,17 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
                     break; //Exits switch statement
                 } //End of if statement
                 if (gyro.getIntegratedZValue() < -90) { //If gyro senses a tilt, it lowers the speed of motor 1 and motor 2 to correct itself
-                    m1.setPower(-.4); //Sets motor 1 to power -.3 to go left to scan for the correct color
-                    m2.setPower(.4); //Sets motor 2 to power .3 to go left to scan for the correct color
-                    m3.setPower(.3); //Sets motor 3 to power .4 to go left to scan for the correct color
-                    m4.setPower(-.3); //Sets motor 4 to power -.4 to go left to scan for the correct color
+                    m1.setPower(-.3); //Sets motor 1 to power -.3 to go left to scan for the correct color
+                    m2.setPower(.3); //Sets motor 2 to power .3 to go left to scan for the correct color
+                    m3.setPower(.4); //Sets motor 3 to power .4 to go left to scan for the correct color
+                    m4.setPower(-.4); //Sets motor 4 to power -.4 to go left to scan for the correct color
                     break; //Exits switch statement
                 } //End of if statement
                 if (gyro.getIntegratedZValue() > -90) { //If gyro senses a tilt, it lowers the speed of motor 3 and motor 4 to correct itself
-                    m1.setPower(-.3); //Sets motor 1 to power -.4 to go left to scan for the correct color
-                    m2.setPower(.3); //Sets motor 2 to power .4 to go left to scan for the correct color
-                    m3.setPower(.4); //Sets motor 3 to power .3 to go left to scan for the correct color
-                    m4.setPower(-.4); //Sets motor 4 to power -.3 to go left to scan for the correct color
+                    m1.setPower(-.4); //Sets motor 1 to power -.4 to go left to scan for the correct color
+                    m2.setPower(.4); //Sets motor 2 to power .4 to go left to scan for the correct color
+                    m3.setPower(.3); //Sets motor 3 to power .3 to go left to scan for the correct color
+                    m4.setPower(-.3); //Sets motor 4 to power -.3 to go left to scan for the correct color
                     break; //Exits switch statement
                 } //End of if statement
                 if (gyro.getIntegratedZValue() == 0) { //If gyro senses no tilt, it continues to go right with all drive train motors set to a power of .3
@@ -389,7 +376,7 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
                     break; //Exits switch statement
                 } //End of if statement
                 break; //Exits switch statement
-
+**/
 
             ///////////////////////////////////////
             //Step 12 [MOVE_CLOSER_TO_BEACON_ONE]//
@@ -428,7 +415,7 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
 
             case FIND_CORRECT_COLOR_BEACON_ONE: //Beginning of case statement FIND_CORRECT_COLOR_BEACON_ONE
 
-                if (colorSensor.blue() > 30) { //Moves right until red is found
+                if (colorSensor.blue() > 150) { //Moves right until red is found
                     m1.setPower(0); //Sets motor 1 to power 0 before next step
                     m2.setPower(0); //Sets motor 2 to power 0 before next step
                     m3.setPower(0); //Sets motor 3 to power 0 before next step
@@ -436,7 +423,14 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
                     runtime.reset(); //Resets time before switching to next step
                     CURRENT_STEP = steps.PUSH_BUTTON_BEACON_ONE; //Sets next step to PUSH_BUTTON_BEACON_ONE
                     break; //Exits switch statement
-                } else if (runtime.seconds() > 3) { //This is for backup only- if this step doesn't complete in 3 seconds, skip beacon one and move to beacon two
+                } else if (range.getDistance(DistanceUnit.CM) > 15 || range.getDistance(DistanceUnit.CM) < 13) {
+                    m1.setPower(0); //Sets motor 1 to power 0 before next step
+                    m2.setPower(0); //Sets motor 2 to power 0 before next step
+                    m3.setPower(0); //Sets motor 3 to power 0 before next step
+                    m4.setPower(0); //Sets motor 4 to power 0 before next step
+                    runtime.reset(); //Resets time before switching to next step
+                    CURRENT_STEP = steps.RANGE_READJUST_BEACON_ONE; //Sets next step to PUSH_BUTTON_BEACON_ONE
+                } else if (runtime.seconds() > 5) { //This is for backup only- if this step doesn't complete in 3 seconds, skip beacon one and move to beacon two
                     m1.setPower(0); //Sets motor 1 to power 0 before next step
                     m2.setPower(0); //Sets motor 2 to power 0 before next step
                     m3.setPower(0); //Sets motor 3 to power 0 before next step
@@ -515,7 +509,7 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
 
             case NEXT_BEACON_STEP_ONE: //Beginning of case statement NEXT_BEACON_STEP_ONE
 
-                if (runtime.seconds() > 0.8) { //Moves right for .8 seconds to get ODS off beacon one white line
+                if (runtime.seconds() > 1) { //Moves right for .8 seconds to get ODS off beacon one white line
                     m1.setPower(0); //Sets motor 1 to power 0 before next step
                     m2.setPower(0); //Sets motor 2 to power 0 before next step
                     m3.setPower(0); //Sets motor 3 to power 0 before next step
@@ -625,13 +619,21 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
 
             case FIND_CORRECT_COLOR_BEACON_TWO: //Beginning of case statement FIND_CORRECT_COLOR_BEACON_TWO
 
-                if (colorSensor.blue() > 30) { //Moves right until red is found
+                if (colorSensor.blue() > 150) { //Moves right until red is found
                     m1.setPower(0); //Sets motor 1 to power 0 before next step
                     m2.setPower(0); //Sets motor 2 to power 0 before next step
                     m3.setPower(0); //Sets motor 3 to power 0 before next step
                     m4.setPower(0); //Sets motor 4 to power 0 before next step
                     runtime.reset(); //Resets time before switching to next step
                     CURRENT_STEP = steps.PUSH_BUTTON_BEACON_TWO; //Sets next step to PUSH_BUTTON_BEACON_ONE
+                    break; //Exits switch statement
+                } else if (range.getDistance(DistanceUnit.CM) > 15 || range.getDistance(DistanceUnit.CM) < 13) {
+                    m1.setPower(0); //Sets motor 1 to power 0 before next step
+                    m2.setPower(0); //Sets motor 2 to power 0 before next step
+                    m3.setPower(0); //Sets motor 3 to power 0 before next step
+                    m4.setPower(0); //Sets motor 4 to power 0 before next step
+                    runtime.reset(); //Resets time before switching to next step
+                    CURRENT_STEP = steps.RANGE_READJUST_BEACON_TWO; //Sets next step to PUSH_BUTTON_BEACON_ONE
                     break; //Exits switch statement
                 }
                 if (gyro.getIntegratedZValue() < -90) { //If gyro senses a tilt, it lowers the speed of motor 1 and motor 2 to correct itself
@@ -711,20 +713,20 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
                     m3.setPower(0); //Sets motor 3 to power 0 before next step
                     m4.setPower(0); //Sets motor 4 to power 0 before next step
                     runtime.reset();
-                    CURRENT_STEP = steps.STOP; //Sets next step to STOP
+                    CURRENT_STEP = steps.ROTATE; //Sets next step to STOP
                     break; //Exits switch statement
                 } //End of if statement
                 if (gyro.getIntegratedZValue() > -90) { //If gyro senses a tilt, it lowers the speed of motor 1 to correct itself
                     m1.setPower(0); //Sets motor 1 to power -.5 to go backwards diagonally toward the center vortex and cap ball
-                    m2.setPower(-.8); //Sets motor 2 to power 0 to go backwards diagonally toward the center vortex and cap ball
-                    m3.setPower(-1); //Sets motor 3 to power 0 to go backwards diagonally toward the center vortex and cap ball
+                    m2.setPower(-1); //Sets motor 2 to power 0 to go backwards diagonally toward the center vortex and cap ball
+                    m3.setPower(-.8); //Sets motor 3 to power 0 to go backwards diagonally toward the center vortex and cap ball
                     m4.setPower(0); //Sets motor 4 to power -1 to go backwards diagonally toward the center vortex and cap ball
                     break; //Exits switch statement
                 } //End of if statement
                 if (gyro.getIntegratedZValue() < -90) { //If gyro senses a tilt, it lowers the speed of motor 4 to correct itself
                     m1.setPower(0); //Sets motor 1 to power -1 to go backwards diagonally toward the center vortex and cap ball
-                    m2.setPower(-1); //Sets motor 2 to power 0 to go backwards diagonally toward the center vortex and cap ball
-                    m3.setPower(-.8); //Sets motor 3 to power 0 to go backwards diagonally toward the center vortex and cap ball
+                    m2.setPower(-.8); //Sets motor 2 to power 0 to go backwards diagonally toward the center vortex and cap ball
+                    m3.setPower(-1); //Sets motor 3 to power 0 to go backwards diagonally toward the center vortex and cap ball
                     m4.setPower(0); //Sets motor 4 to power -.5 to go backwards diagonally toward the center vortex and cap ball
                     break; //Exits switch statement
                 } //End of if statement
@@ -735,6 +737,22 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
                     m4.setPower(0); //Sets motor 4 to power -1 to go backwards diagonally toward the center vortex and cap ball
                     break; //Exits switch statement
                 } //End of if statement
+
+            case ROTATE:
+
+                if (runtime.seconds() > 1) { //Moves diagonally backwards towards the base of the center vortex for 2.5 seconds, bumps the cap ball, and parks
+                    m1.setPower(0); //Sets motor 1 to power 0 before next step
+                    m2.setPower(0); //Sets motor 2 to power 0 before next step
+                    m3.setPower(0); //Sets motor 3 to power 0 before next step
+                    m4.setPower(0); //Sets motor 4 to power 0 before next step
+                    runtime.reset();
+                    CURRENT_STEP = steps.STOP; //Sets next step to STOP
+                    break; //Exits switch statement
+                } //End of if statement
+                m1.setPower(-1);
+                m2.setPower(1);
+                m3.setPower(-1);
+                m4.setPower(1);
 
                 ////////
                 //STOP//
@@ -788,6 +806,74 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
                     m4.setPower(0); //Sets motor 4 to power -.2 to go left to scan for the correct color
                 } else if (range.getDistance(DistanceUnit.CM) == 20) {
                     CURRENT_STEP = steps.NEXT_BEACON_STEP_TWO; //Sets next step to NEXT_BEACON_STEP_TWO
+                }
+
+            case RANGE_READJUST_BEACON_ONE:
+
+                if (range.getDistance(DistanceUnit.CM) < 14) {
+                    if (colorSensor.blue() > 150) { //Moves right until next white line is found
+                        m1.setPower(0); //Sets motor 1 to power 0 before next step
+                        m2.setPower(0); //Sets motor 2 to power 0 before next step
+                        m3.setPower(0); //Sets motor 3 to power 0 before next step
+                        m4.setPower(0); //Sets motor 4 to power 0 before next step
+                        runtime.reset(); //Resets time before switching to next step
+                        CURRENT_STEP = steps.PUSH_BUTTON_BEACON_ONE; //Sets next step to DRIVE_OFF_WHITE_LINE_BEACON_TWO
+                        break; //Exits switch statement
+                    } //End of if statement
+                    m1.setPower(-.3); //Sets motor 1 to power -.3 to go left to scan for the correct color
+                    m2.setPower(0); //Sets motor 2 to power .3 to go left to scan for the correct color
+                    m3.setPower(0); //Sets motor 3 to power .2 to go left to scan for the correct color
+                    m4.setPower(-.3); //Sets motor 4 to power -.2 to go left to scan for the correct color
+                } else if (range.getDistance(DistanceUnit.CM) > 14) {
+                    if (colorSensor.blue() > 150) { //Moves right until next white line is found
+                        m1.setPower(0); //Sets motor 1 to power 0 before next step
+                        m2.setPower(0); //Sets motor 2 to power 0 before next step
+                        m3.setPower(0); //Sets motor 3 to power 0 before next step
+                        m4.setPower(0); //Sets motor 4 to power 0 before next step
+                        runtime.reset(); //Resets time before switching to next step
+                        CURRENT_STEP = steps.PUSH_BUTTON_BEACON_ONE; //Sets next step to DRIVE_OFF_WHITE_LINE_BEACON_TWO
+                        break; //Exits switch statement
+                    } //End of if statement
+                    m1.setPower(0); //Sets motor 1 to power -.3 to go left to scan for the correct color
+                    m2.setPower(.3); //Sets motor 2 to power .3 to go left to scan for the correct color
+                    m3.setPower(.3); //Sets motor 3 to power .2 to go left to scan for the correct color
+                    m4.setPower(0); //Sets motor 4 to power -.2 to go left to scan for the correct color
+                } else if (range.getDistance(DistanceUnit.CM) == 14) {
+                    CURRENT_STEP = steps.FIND_CORRECT_COLOR_BEACON_ONE; //Sets next step to NEXT_BEACON_STEP_TWO
+                }
+
+            case RANGE_READJUST_BEACON_TWO:
+
+                if (range.getDistance(DistanceUnit.CM) < 14) {
+                    if (colorSensor.blue() > 150) { //Moves right until next white line is found
+                        m1.setPower(0); //Sets motor 1 to power 0 before next step
+                        m2.setPower(0); //Sets motor 2 to power 0 before next step
+                        m3.setPower(0); //Sets motor 3 to power 0 before next step
+                        m4.setPower(0); //Sets motor 4 to power 0 before next step
+                        runtime.reset(); //Resets time before switching to next step
+                        CURRENT_STEP = steps.PUSH_BUTTON_BEACON_TWO; //Sets next step to DRIVE_OFF_WHITE_LINE_BEACON_TWO
+                        break; //Exits switch statement
+                    } //End of if statement
+                    m1.setPower(-.3); //Sets motor 1 to power -.3 to go left to scan for the correct color
+                    m2.setPower(0); //Sets motor 2 to power .3 to go left to scan for the correct color
+                    m3.setPower(0); //Sets motor 3 to power .2 to go left to scan for the correct color
+                    m4.setPower(-.3); //Sets motor 4 to power -.2 to go left to scan for the correct color
+                } else if (range.getDistance(DistanceUnit.CM) > 14) {
+                    if (colorSensor.blue() > 150) { //Moves right until next white line is found
+                        m1.setPower(0); //Sets motor 1 to power 0 before next step
+                        m2.setPower(0); //Sets motor 2 to power 0 before next step
+                        m3.setPower(0); //Sets motor 3 to power 0 before next step
+                        m4.setPower(0); //Sets motor 4 to power 0 before next step
+                        runtime.reset(); //Resets time before switching to next step
+                        CURRENT_STEP = steps.PUSH_BUTTON_BEACON_TWO; //Sets next step to DRIVE_OFF_WHITE_LINE_BEACON_TWO
+                        break; //Exits switch statement
+                    } //End of if statement
+                    m1.setPower(0); //Sets motor 1 to power -.3 to go left to scan for the correct color
+                    m2.setPower(.3); //Sets motor 2 to power .3 to go left to scan for the correct color
+                    m3.setPower(.3); //Sets motor 3 to power .2 to go left to scan for the correct color
+                    m4.setPower(0); //Sets motor 4 to power -.2 to go left to scan for the correct color
+                } else if (range.getDistance(DistanceUnit.CM) == 14) {
+                    CURRENT_STEP = steps.FIND_CORRECT_COLOR_BEACON_ONE; //Sets next step to NEXT_BEACON_STEP_TWO
                 }
         } //End of switch statement
     } //End of loop

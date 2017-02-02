@@ -242,22 +242,22 @@ public class Red_Alternate extends TardisOpModeAutonomous { //Imports presets fo
                 }
                 if (gyro.getIntegratedZValue() < -90) { //If gyro senses a tilt, it lowers the speed of motor 1 and motor 2 to correct itself
                     m1.setPower(.5); //Sets motor 1 to power .25 to go right and look for the beacon two white line
-                    m2.setPower(.4); //Sets motor 2 to power -.25 to go right and look for the beacon two white line
-                    m3.setPower(.5); //Sets motor 3 to power -.35 to go right and look for the beacon two white line
+                    m2.setPower(-.4); //Sets motor 2 to power -.25 to go right and look for the beacon two white line
+                    m3.setPower(-.5); //Sets motor 3 to power -.35 to go right and look for the beacon two white line
                     m4.setPower(.4); //Sets motor 4 to power .35 to go right and look for the beacon two white line
                     break; //Exits switch statement
                 } //End of if statement
                 if (gyro.getIntegratedZValue() > -90) { //If gyro senses a tilt, it lowers the speed of motor 3 and motor 4 to correct itself
                     m1.setPower(.4); //Sets motor 1 to power .35 to go right and look for the beacon two white line
-                    m2.setPower(.5); //Sets motor 2 to power -.35 to go right and look for the beacon two white line
-                    m3.setPower(.4); //Sets motor 3 to power -.25 to go right and look for the beacon two white line
+                    m2.setPower(-.5); //Sets motor 2 to power -.35 to go right and look for the beacon two white line
+                    m3.setPower(-.4); //Sets motor 3 to power -.25 to go right and look for the beacon two white line
                     m4.setPower(.5); //Sets motor 4 to power .25 to go right and look for the beacon two white line
                     break; //Exits switch statement
                 } //End of if statement
                 if (gyro.getIntegratedZValue() == -90) { //If gyro senses no tilt, it continues to go right with all drive train motors set to a power of .35
                     m1.setPower(.5); //Sets motor 1 to power .35 to go right and look for the beacon two white line
-                    m2.setPower(.5); //Sets motor 2 to power -.35 to go right and look for the beacon two white line
-                    m3.setPower(.5); //Sets motor 3 to power -.35 to go right and look for the beacon two white line
+                    m2.setPower(-.5); //Sets motor 2 to power -.35 to go right and look for the beacon two white line
+                    m3.setPower(-.5); //Sets motor 3 to power -.35 to go right and look for the beacon two white line
                     m4.setPower(.5); //Sets motor 4 to power .35 to go right and look for the beacon two white line
                     break; //Exits switch statement
                 } //End of if statement.
@@ -293,22 +293,22 @@ public class Red_Alternate extends TardisOpModeAutonomous { //Imports presets fo
                 }
                 if (gyro.getIntegratedZValue() < 90) { //If gyro senses a tilt, it lowers the speed of motor 1 and motor 2 to correct itself
                     m1.setPower(-.5); //Sets motor 1 to power .25 to go right and look for the beacon two white line
-                    m2.setPower(-.4); //Sets motor 2 to power -.25 to go right and look for the beacon two white line
-                    m3.setPower(-.5); //Sets motor 3 to power -.35 to go right and look for the beacon two white line
+                    m2.setPower(.4); //Sets motor 2 to power -.25 to go right and look for the beacon two white line
+                    m3.setPower(.5); //Sets motor 3 to power -.35 to go right and look for the beacon two white line
                     m4.setPower(-.4); //Sets motor 4 to power .35 to go right and look for the beacon two white line
                     break; //Exits switch statement
                 } //End of if statement
                 if (gyro.getIntegratedZValue() > 90) { //If gyro senses a tilt, it lowers the speed of motor 3 and motor 4 to correct itself
                     m1.setPower(-.4); //Sets motor 1 to power .35 to go right and look for the beacon two white line
-                    m2.setPower(-.5); //Sets motor 2 to power -.35 to go right and look for the beacon two white line
-                    m3.setPower(-.4); //Sets motor 3 to power -.25 to go right and look for the beacon two white line
+                    m2.setPower(.5); //Sets motor 2 to power -.35 to go right and look for the beacon two white line
+                    m3.setPower(.4); //Sets motor 3 to power -.25 to go right and look for the beacon two white line
                     m4.setPower(-.5); //Sets motor 4 to power .25 to go right and look for the beacon two white line
                     break; //Exits switch statement
                 } //End of if statement
                 if (gyro.getIntegratedZValue() == 90) { //If gyro senses no tilt, it continues to go right with all drive train motors set to a power of .35
                     m1.setPower(-.5); //Sets motor 1 to power .35 to go right and look for the beacon two white line
-                    m2.setPower(-.5); //Sets motor 2 to power -.35 to go right and look for the beacon two white line
-                    m3.setPower(-.5); //Sets motor 3 to power -.35 to go right and look for the beacon two white line
+                    m2.setPower(.5); //Sets motor 2 to power -.35 to go right and look for the beacon two white line
+                    m3.setPower(.5); //Sets motor 3 to power -.35 to go right and look for the beacon two white line
                     m4.setPower(-.5); //Sets motor 4 to power .35 to go right and look for the beacon two white line
                     break; //Exits switch statement
                 } //End of if statement.

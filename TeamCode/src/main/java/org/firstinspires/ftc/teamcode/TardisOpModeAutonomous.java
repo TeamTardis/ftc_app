@@ -73,8 +73,8 @@ public abstract class TardisOpModeAutonomous extends OpMode { //Imports presets 
         colorSensor = hardwareMap.colorSensor.get("c1"); //Sets colorSensor to c1 in the config
         colorSensor.enableLed(false); //Turns Color Sensor LED off
 
-        m5.setMaxSpeed(1575);  //Set max speed medium for shooter
-        m6.setMaxSpeed(1575);
+        m5.setMaxSpeed(1600);  //Set max speed medium for shooter
+        m6.setMaxSpeed(1600);
 
         touchSensor1 = hardwareMap.touchSensor.get("t1"); //Sets touchSensor1 to t1 in the config
         I2cAddr t1 = I2cAddr.create8bit(0x60); //Changes I2c Address to 0x60

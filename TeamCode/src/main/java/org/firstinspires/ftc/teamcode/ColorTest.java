@@ -58,7 +58,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Robot moves from predetermined values and sensor values to complete tasks
  */
 @Autonomous(name="ColorTest", group="Autonomous")
-@Disabled
+
 public class ColorTest extends LinearOpMode {
 
     DcMotor m1;

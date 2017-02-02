@@ -41,12 +41,12 @@ public class Teleop2017 extends TardisOpMode { //Init code in separate program
     float LUD2; //Left joystick y axis (Game pad 2)
     float RUD; //Right joystick y axis (Game pad 2)
     double threshold = 0.1; //Threshold
-    int shooterSpeed = 3; //Shooter speed toggle variable
+    int shooterSpeed = 2; //Shooter speed toggle variable
 
     @Override
     public void loop() {
 
-        telemetry.addData(">", "Color Red (Ground): " + colorSensor2.red() + "\nColor Blue (Ground): " + colorSensor2.blue() + "\nzValue: " + gyro.getIntegratedZValue() + "\nShooter Speed" + shooterSpeed); //Adds telemetry to debug
+        telemetry.addData(">", "Color Red (Ground): " + colorSensor2.red() + "\nColor Blue (Ground): " + colorSensor2.blue() + "\nzValue: " + gyro.getIntegratedZValue() + "\nShooter Speed: " + shooterSpeed); //Adds telemetry to debug
         telemetry.update(); //Updates telemetry with new information
 
         LUD = gamepad1.left_stick_y;   //(Game pad 1)
@@ -75,18 +75,18 @@ public class Teleop2017 extends TardisOpMode { //Init code in separate program
         shooterPrev = shooterCurr; //Sets back to toggleable state
 
         if (gamepad1.y)  {
-            m5.setMaxSpeed(1850);  //Set max speed high for shooter
-            m6.setMaxSpeed(1700);
+            m5.setMaxSpeed(1100);  //Set max speed high for shooter
+            m6.setMaxSpeed(1100);
             shooterSpeed = 3; //Shooter speed variable = 3
         }
         if (gamepad1.b)  {
-            m5.setMaxSpeed(1750);  //Set max speed medium for shooter
-            m6.setMaxSpeed(1600);
+            m5.setMaxSpeed(1000);  //Set max speed medium for shooter
+            m6.setMaxSpeed(1000);
             shooterSpeed = 2; //Shooter speed variable = 2
         }
         if (gamepad1.a)  {
-            m5.setMaxSpeed(1650);  //Set max speed low for shooter
-            m6.setMaxSpeed(1500);
+            m5.setMaxSpeed(900);  //Set max speed low for shooter
+            m6.setMaxSpeed(900);
             shooterSpeed = 1; //Shooter speed variable = 1
         }
 
@@ -97,7 +97,7 @@ public class Teleop2017 extends TardisOpMode { //Init code in separate program
 
         //If the left trigger is pressed hold servos up (Game pad2)
         if (gamepad2.left_trigger == 1) {
-            SFront.setPosition(.2); //Up
+            SFront.setPosition(.3); //Up
         } else {
             SFront.setPosition(0); //Down
         }
