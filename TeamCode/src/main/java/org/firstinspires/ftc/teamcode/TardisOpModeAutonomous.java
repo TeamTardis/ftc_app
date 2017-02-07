@@ -73,8 +73,8 @@ public abstract class TardisOpModeAutonomous extends OpMode { //Imports presets 
         colorSensor = hardwareMap.colorSensor.get("c1"); //Sets colorSensor to c1 in the config
         colorSensor.enableLed(false); //Turns Color Sensor LED off
 
-        m5.setMaxSpeed(1600);  //Set max speed medium for shooter
-        m6.setMaxSpeed(1600);
+        m5.setMaxSpeed(1650);  //Set max speed medium for shooter
+        m6.setMaxSpeed(1650);
 
         touchSensor1 = hardwareMap.touchSensor.get("t1"); //Sets touchSensor1 to t1 in the config
         I2cAddr t1 = I2cAddr.create8bit(0x60); //Changes I2c Address to 0x60
@@ -85,6 +85,7 @@ public abstract class TardisOpModeAutonomous extends OpMode { //Imports presets 
         gyro = (ModernRoboticsI2cGyro) hardwareMap.gyroSensor.get("gyro"); //Sets gyro to gyro in the config
 
         s1.setPosition(0.5); //Raises the linear actuator
+        s2.setPosition(.05); //Launching servo to lowest position
         s3.setPosition(0.45); //Fits the mast forks inside the 18 by 18 by 18 inch square
 
         gyro.calibrate(); //Calibrate the gyro sensor

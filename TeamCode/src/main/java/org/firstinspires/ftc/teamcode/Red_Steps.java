@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode; //Use the package org.firstinspires.ftc.teamcode
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor; //Import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.ColorSensor; //Import com.qualcomm.robotcore.hardware.ColorSensor for the color sensors
 import com.qualcomm.robotcore.hardware.DcMotor; //Import com.qualcomm.robotcore.hardware.DcMotor for motors
 import com.qualcomm.robotcore.hardware.GyroSensor; //Import com.qualcomm.robotcore.hardware.GyroSensor for the gyro sensor
@@ -45,6 +46,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit; //Impor
  **/
 
 @Autonomous(name = "RED", group = "AutoFast") //Display name and group found in on controller phone
+@Disabled
 public class Red_Steps extends TardisOpModeAutonomous { //Imports presets for initiation from TardisOpModeAutonomous
 
     public enum steps { //All steps for completing autonomous

@@ -4,6 +4,7 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor; //Import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor
 import com.qualcomm.robotcore.hardware.DcMotor; //Import com.qualcomm.robotcore.hardware.DcMotor for motors
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.I2cAddr; //Import com.qualcomm.robotcore.hardware.I2cAddr to allow to change I2c addresses
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor; //Import com.qualcomm.robotcore.hardware.OpticalDistanceSensor for the optical distance sensor
 import com.qualcomm.robotcore.hardware.Servo; //Import com.qualcomm.robotcore.hardware.Servo for servos
@@ -73,8 +74,8 @@ public abstract class TardisOpMode extends OpMode { //Imports presets for initia
         colorSensor2 = (ModernRoboticsI2cColorSensor) hardwareMap.colorSensor.get("c1"); //Sets colorSensor to c2 in the config
         colorSensor2.enableLed(true); //Turns Color Sensor LED on
 
-        m5.setMaxSpeed(1000); //Sets max speed of m5 to 1600
-        m6.setMaxSpeed(1000); //Sets max speed of m6 to 1600
+        m5.setMaxSpeed(1700); //Sets max speed of m5 to 1600
+        m6.setMaxSpeed(1700); //Sets max speed of m6 to 1600
 
         touchSensor1 = hardwareMap.touchSensor.get("t1"); //Sets touchSensor1 to t1 in the config
         I2cAddr t1 = I2cAddr.create8bit(0x60); //Changes I2c Address to 0x60
@@ -85,6 +86,7 @@ public abstract class TardisOpMode extends OpMode { //Imports presets for initia
         gyro = (ModernRoboticsI2cGyro) hardwareMap.gyroSensor.get("gyro"); //Sets gyro to gyro in the config
 
         s1.setPosition(0.5); //Raises the linear actuator
+        s2.setPosition(.05); //Launching servo to lowest position
         s3.setPosition(0.45); //Fits the mast forks inside the 18 by 18 by 18 inch square
 
         gyro.calibrate(); //Calibrate the gyro sensor

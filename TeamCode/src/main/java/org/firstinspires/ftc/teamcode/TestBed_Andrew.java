@@ -22,7 +22,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.firstinspires.ftc.teamcode.Teleop2017.steps.COLOR_FIND;
 import static org.firstinspires.ftc.teamcode.TestBed_Andrew.steps.FORWARD;
 import static org.firstinspires.ftc.teamcode.TestBed_Andrew.steps.NORMAL_DRIVE;
 import static org.firstinspires.ftc.teamcode.TestBed_Andrew.steps.ROTATE;

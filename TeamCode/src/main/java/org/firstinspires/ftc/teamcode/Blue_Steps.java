@@ -84,7 +84,7 @@ public class Blue_Steps extends TardisOpModeAutonomous { //Imports presets for i
 
         RANGE_READJUST,
         RANGE_READJUST_BEACON_ONE,
-        RANGE_READJUST_BEACON_TWO
+        RANGE_READJUST_BEACON_TWO,
 
     } //End of steps for autonomous
 

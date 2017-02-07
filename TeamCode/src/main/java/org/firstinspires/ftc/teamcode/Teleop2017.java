@@ -11,13 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Teleop2017 extends TardisOpMode { //Init code in separate program
 
     public enum steps {
-        ROTATE,
         NORMAL_DRIVE,
-        WHITE_LINE,
-        FORWARD,
-        COLOR_FIND,
-        PUSH,
-        STOP,
         SHOOT_BALL
     }
 
@@ -30,6 +24,9 @@ public class Teleop2017 extends TardisOpMode { //Init code in separate program
     boolean shooterCurr = false; //Toggle shooter current state
     boolean shooterPrev = false; //Toggle shooter previous state
     boolean shooterOn = false; //Toggle shooter on state
+    boolean linearCurr = false; //Toggle linear actuator current state
+    boolean linearPrev = false; //Toggle linear actuator previous state
+    boolean linearExt = false; //Toggle linear actuator extended state
 
     int beaconSelect;
 
@@ -75,25 +72,36 @@ public class Teleop2017 extends TardisOpMode { //Init code in separate program
         shooterPrev = shooterCurr; //Sets back to toggleable state
 
         if (gamepad1.y)  {
-            m5.setMaxSpeed(1100);  //Set max speed high for shooter
-            m6.setMaxSpeed(1100);
+            m5.setMaxSpeed(1800);  //Set max speed high for shooter
+            m6.setMaxSpeed(1800);
             shooterSpeed = 3; //Shooter speed variable = 3
         }
         if (gamepad1.b)  {
-            m5.setMaxSpeed(1000);  //Set max speed medium for shooter
-            m6.setMaxSpeed(1000);
+            m5.setMaxSpeed(1700);  //Set max speed medium for shooter
+            m6.setMaxSpeed(1700);
             shooterSpeed = 2; //Shooter speed variable = 2
         }
         if (gamepad1.a)  {
-            m5.setMaxSpeed(900);  //Set max speed low for shooter
-            m6.setMaxSpeed(900);
+            m5.setMaxSpeed(1600);  //Set max speed low for shooter
+            m6.setMaxSpeed(1600);
             shooterSpeed = 1; //Shooter speed variable = 1
         }
 
-        //If the joystick button is pressed, move the servo (Game pad 2)
-        if (gamepad2.right_stick_button) {
-            s1.setPosition(RUD/3 + 0.2); //Linear actuator based on joystick inputs
+        //Check status of right bumper
+        linearCurr = gamepad2.x;
+
+        //Check for button state transitions.
+        if ((linearCurr == true) && (linearCurr != linearPrev)) {
+
+            //Sweeper transitioning to toggled state
+            linearExt = !linearExt;
+            if (linearExt) {
+                s1.setPosition(1);
+            } else {
+                s1.setPosition(.5); //Do nothing
+            }
         }
+        linearPrev = linearCurr; //Sets back to toggleable state
 
         //If the left trigger is pressed hold servos up (Game pad2)
         if (gamepad2.left_trigger == 1) {
@@ -146,15 +154,7 @@ public class Teleop2017 extends TardisOpMode { //Init code in separate program
             runtime.reset();
             CURRENT_STEP = steps.SHOOT_BALL;
         }
-        /*if (gamepad1.b) {
-            CURRENT_STEP = ROTATE;
-            beaconSelect = 0;
-        }
-        if (gamepad1.x) {
-            CURRENT_STEP = ROTATE;
-            beaconSelect = 1;
-        }
-        */
+
         if(CURRENT_STEP != steps.NORMAL_DRIVE && R > threshold || R < -threshold || LRL > threshold || LRL < -threshold || LUD > threshold || LUD < -threshold) {
             CURRENT_STEP = steps.NORMAL_DRIVE;
         }
@@ -212,7 +212,7 @@ public class Teleop2017 extends TardisOpMode { //Init code in separate program
 
             case SHOOT_BALL:
 
-                if (runtime.seconds() < 1.5) { //Wait
+                if (gamepad1.left_trigger == 1) {
                     s2.setPosition(1);
                     break;
                 } else {
@@ -220,150 +220,7 @@ public class Teleop2017 extends TardisOpMode { //Init code in separate program
                     CURRENT_STEP = steps.NORMAL_DRIVE;
                     break;
                 }
-            /*
-            case ROTATE:
 
-                ///////
-                //RED//
-                ///////
-
-                if(gyro.getIntegratedZValue() < -5 && beaconSelect == 0) {
-                    m1.setPower(.1);
-                    m2.setPower(-.1);
-                    m3.setPower(.1);
-                    m4.setPower(-.1);
-                    break;
-                }
-                if(gyro.getIntegratedZValue() > 5 && beaconSelect == 0) {
-                    m1.setPower(-.07);
-                    m2.setPower(.07);
-                    m3.setPower(-.07);
-                    m4.setPower(.07);
-                    break;
-                }
-                if(gyro.getIntegratedZValue() > -5 && gyro.getIntegratedZValue() < 5 && beaconSelect == 0) {
-                    CURRENT_STEP = steps.WHITE_LINE;
-                    break;
-                }
-
-                ////////
-                //BLUE//
-                ////////
-
-                if(gyro.getIntegratedZValue() < -95 && beaconSelect == 1) {
-                    m1.setPower(.1);
-                    m2.setPower(-.1);
-                    m3.setPower(.1);
-                    m4.setPower(-.1);
-                    break;
-                }
-                if(gyro.getIntegratedZValue() > -85 && beaconSelect == 1) {
-                    m1.setPower(-.1);
-                    m2.setPower(.1);
-                    m3.setPower(-.1);
-                    m4.setPower(.1);
-                    break;
-                }
-                if(gyro.getIntegratedZValue() > -95 && gyro.getIntegratedZValue() < -85 && beaconSelect == 1) {
-                    CURRENT_STEP = steps.WHITE_LINE;
-                    break;
-                }
-
-            case WHITE_LINE:
-
-                if(odsSensor1.getRawLightDetected() < .5) {
-                    m1.setPower(-.2);
-                    m2.setPower(-.2);
-                    m3.setPower(-.2);
-                    m4.setPower(-.2);
-                    break;
-                }
-                if(odsSensor1.getRawLightDetected() > .5) {
-                    m1.setPower(0); //Sets motor 1 to power 0 before next step
-                    m2.setPower(0); //Sets motor 2 to power 0 before next step
-                    m3.setPower(0); //Sets motor 3 to power 0 before next step
-                    m4.setPower(0); //Sets motor 4 to power 0 before next step
-                    CURRENT_STEP = FORWARD;
-                    break;
-                }
-
-            case FORWARD:
-
-                if (range.getDistance(DistanceUnit.CM) == 14) { //Move the robot closer or farther from the beacon wall to get correct distance to sense colors
-                    m1.setPower(0); //Sets motor 1 to power 0 before next step
-                    m2.setPower(0); //Sets motor 2 to power 0 before next step
-                    m3.setPower(0); //Sets motor 3 to power 0 before next step
-                    m4.setPower(0); //Sets motor 4 to power 0 before next step
-                    runtime.reset(); //Resets time before switching to next step
-                    CURRENT_STEP = COLOR_FIND; //Sets next step to NORMAL_DRIVE
-                    break; //Exits switch statement
-                } //End of if statement
-                if (range.getDistance(DistanceUnit.CM) < 14) { //If the robot is to close to the beacon, back away
-                    m1.setPower(.2); //Sets motor 1 to power -.2 to go backward because the robot is too close to the beacon
-                    m2.setPower(-.2); //Sets motor 2 to power -.2 to go backward because the robot is too close to the beacon
-                    m3.setPower(-.2); //Sets motor 3 to power -.2 to go backward because the robot is too close to the beacon
-                    m4.setPower(.2); //Sets motor 4 to power -.2 to go backward because the robot is too close to the beacon
-                    break; //Exits switch statement
-                } //End of if statement
-                if (range.getDistance(DistanceUnit.CM) > 14) { //If the robot is to far away from the beacon, move closer
-                    m1.setPower(-.2); //Sets motor 1 to power .2 to go forward because the robot is too far from the beacon
-                    m2.setPower(.2); //Sets motor 2 to power .2 to go forward because the robot is too far from the beacon
-                    m3.setPower(.2); //Sets motor 3 to power .2 to go forward because the robot is too far from the beacon
-                    m4.setPower(-.2); //Sets motor 4 to power .2 to go forward because the robot is too far from the beacon
-                    break; //Exits switch statement
-                } //End of if statement
-                break; //Exits switch statement
-
-            case COLOR_FIND:
-
-                if (colorSensor2.red() > 1.5) { //Moves right until red is found
-                    m1.setPower(0); //Sets motor 1 to power 0 before next step
-                    m2.setPower(0); //Sets motor 2 to power 0 before next step
-                    m3.setPower(0); //Sets motor 3 to power 0 before next step
-                    m4.setPower(0); //Sets motor 4 to power 0 before next step
-                    runtime.reset(); //Resets time before switching to next step
-                    CURRENT_STEP = PUSH; //Sets next step to PUSH_BUTTON_BEACON_ONE
-                    break; //Exits switch statement
-                }
-                if (gyro.getIntegratedZValue() < 0) { //If gyro senses a tilt, it lowers the speed of motor 1 and motor 2 to correct itself
-                    m1.setPower(.2); //Sets motor 1 to power .2 to go right to scan for the correct color
-                    m2.setPower(.2); //Sets motor 2 to power -.2 to go right to scan for the correct color
-                    m3.setPower(.3); //Sets motor 3 to power -.3 to go right to scan for the correct color
-                    m4.setPower(.3); //Sets motor 4 to power .3 to go right to scan for the correct color
-                    break; //Exits switch statement
-                } //End of if statement
-                if (gyro.getIntegratedZValue() > 0) { //If gyro senses a tilt, it lowers the speed of motor 3 and motor 4 to correct itself
-                    m1.setPower(.3); //Sets motor 1 to power .3 to go right to scan for the correct color
-                    m2.setPower(.3); //Sets motor 2 to power -.3 to go right to scan for the correct color
-                    m3.setPower(.2); //Sets motor 3 to power -.2 to go right to scan for the correct color
-                    m4.setPower(.2); //Sets motor 4 to power .2 to go right to scan for the correct color
-                    break; //Exits switch statement
-                } //End of if statement
-                if (gyro.getIntegratedZValue() == 0) { //If gyro senses no tilt, it continues to go right with all drive train motors set to a power of .3
-                    m1.setPower(.3); //Sets motor 1 to power .3 to go right to scan for the correct color
-                    m2.setPower(.3); //Sets motor 2 to power -.3 to go right to scan for the correct color
-                    m3.setPower(.3); //Sets motor 3 to power -.3 to go right to scan for the correct color
-                    m4.setPower(.3); //Sets motor 4 to power .3 to go right to scan for the correct color
-                    break; //Exits switch statement
-                } //End of if statement
-                break; //Exits switch statement
-
-            case PUSH:
-
-                if (runtime.seconds() > 2) { //Moves forward to push button for 2 seconds
-                    m1.setPower(0); //Sets motor 1 to power 0 before next step
-                    m2.setPower(0); //Sets motor 2 to power 0 before next step
-                    m3.setPower(0); //Sets motor 3 to power 0 before next step
-                    m4.setPower(0); //Sets motor 4 to power 0 before next step
-                    runtime.reset(); //Resets time before switching to next step
-                    CURRENT_STEP = steps.NORMAL_DRIVE; //Sets next step to BACK_OFF_BEACON_ONE
-                    break; //Exits switch statement
-                } //End of if statement
-                m1.setPower(-.4); //Sets motor 1 to power .4 to go forward to push button
-                m2.setPower(.4); //Sets motor 2 to power .4 to go forward to push button
-                m3.setPower(.4); //Sets motor 3 to power .4 to go forward to push button
-                m4.setPower(-.4); //Sets motor 4 to power .4 to go forward to push button
-                break; //Exits switch statement */
-        }
+        } //End of switch statement
     } //Void loop end
 } //OpMode loop end

@@ -46,7 +46,7 @@ public class Red_Alternate extends TardisOpModeAutonomous { //Imports presets fo
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         START_RESET,
-        SPEED_UP_SHOOTERS,
+        DRIVE_TO_VORTEX,
         SHOOT_FIRST_BALL,
         LOWER_SERVO_1, //[Step 5] Lowers launching servo (resets it to original position)
         SHOOT_SECOND_BALL, //[Step 6] Shoot second ball by lifting ball using launching servo
@@ -90,21 +90,42 @@ public class Red_Alternate extends TardisOpModeAutonomous { //Imports presets fo
 
                 runtime.reset();
                 matchRuntime.reset();
-                m5.setMaxSpeed(1800);  //Set max speed medium for shooter
-                m6.setMaxSpeed(1800);
+                m5.setMaxSpeed(1700);  //Set max speed medium for shooter
+                m6.setMaxSpeed(1700);
                 s3.setPosition(0.35); //Forks pointed up
-                CURRENT_STEP = steps.SPEED_UP_SHOOTERS; //Sets next step to DRIVE_TO_CAP_BALL
+                CURRENT_STEP = steps.DRIVE_TO_VORTEX; //Sets next step to DRIVE_TO_CAP_BALL
                 break;
 
-            case SPEED_UP_SHOOTERS:
+            case DRIVE_TO_VORTEX:
 
-                if (runtime.seconds() > 2.5) { //Sets power of launcher motors to 1 with their max speed set to 1600 (see TardisOpModeAutonomous) for 1.5 seconds
+                if (range.getDistance(DistanceUnit.CM) > 100) { //Sets power of launcher motors to 1 with their max speed set to 1600 (see TardisOpModeAutonomous) for 1.5 seconds
                     m1.setPower(0); //Sets motor 1 to power 0 before next step
                     m2.setPower(0); //Sets motor 2 to power 0 before next step
                     m3.setPower(0); //Sets motor 3 to power 0 before next step
                     m4.setPower(0); //Sets motor 4 to power 0 before next step
                     runtime.reset(); //Resets time before switching to next step
                     CURRENT_STEP = steps.SHOOT_FIRST_BALL; //Sets next step to SHOOT_FIRST_BALL
+                    break; //Exits switch statement
+                } //End of if statement
+                if (gyro.getIntegratedZValue() < 0) { //If gyro senses a tilt, it lowers the speed of motor 1 to correct itself
+                    m1.setPower(0); //Sets motor 1 to power .8 to go diagonally toward beacon one
+                    m2.setPower(-.4); //Sets motor 2 to power 0 to go diagonally toward beacon one
+                    m3.setPower(-.7); //Sets motor 3 to power 0 to go diagonally toward beacon one
+                    m4.setPower(0); //Sets motor 4 to power 1 to go diagonally toward beacon one
+                    break; //Exits switch statement
+                } //End of if statement
+                if (gyro.getIntegratedZValue() > 0) { //If gyro senses a tilt, it lowers the speed of motor 4 to correct itself
+                    m1.setPower(0); //Sets motor 1 to power 1 to go diagonally toward beacon one
+                    m2.setPower(-.7); //Sets motor 2 to power 0 to go diagonally toward beacon one
+                    m3.setPower(-.4); //Sets motor 3 to power 0 to go diagonally toward beacon one
+                    m4.setPower(0); //Sets motor 4 to power .8 to go diagonally toward beacon one
+                    break; //Exits switch statement
+                } //End of if statement
+                if (gyro.getIntegratedZValue() == 0) { //If gyro senses no tilt, it will continue to move at full power with both motors 1 and 4
+                    m1.setPower(0); //Sets motor 1 to power 1 to go diagonally toward beacon one
+                    m2.setPower(-.7); //Sets motor 2 to power 0 to go diagonally toward beacon one
+                    m3.setPower(-.7); //Sets motor 3 to power 0 to go diagonally toward beacon one
+                    m4.setPower(0); //Sets motor 4 to power 1 to go diagonally toward beacon one
                     break; //Exits switch statement
                 } //End of if statement
                 m5.setPower(1); //Sets launcher motor 5 to 1 to prepare to shoot ball
@@ -155,164 +176,44 @@ public class Red_Alternate extends TardisOpModeAutonomous { //Imports presets fo
                     m3.setPower(0); //Sets motor 3 to power 0 before next step
                     m4.setPower(0); //Sets motor 4 to power 0 before next step
                     runtime.reset(); //Resets time before switching to next step
-                    CURRENT_STEP = steps.DRIVE_TO_CAP_BALL; //Sets next step to LOWER_SERVO_2
+                    CURRENT_STEP = steps.WAIT_PARK; //Sets next step to LOWER_SERVO_2
                     break; //Exits switch statement
                 } //End of if statement
                 s2.setPosition(1); //Sets launching servo to launching position
                 break; //Exits switch statement
 
-            case DRIVE_TO_CAP_BALL:
-
-                if (runtime.seconds() > 3) {
-                    m1.setPower(0);
-                    m2.setPower(0);
-                    m3.setPower(0);
-                    m4.setPower(0);
-                    s2.setPosition(.05); //Sets launching servo to launching position
-                    runtime.reset(); //Resets time before switching to next step
-                    CURRENT_STEP = steps.ROTATE; //Sets next step to FIND_WHITE_LINE_BEACON_ONE
-                    break; //Exits switch statement
-                }
-                if (gyro.getIntegratedZValue() < 0) { //If gyro senses a tilt, it lowers the speed of motor 1 to correct itself
-                    m1.setPower(.8); //Sets motor 1 to power .8 to go diagonally toward beacon one
-                    m2.setPower(0); //Sets motor 2 to power 0 to go diagonally toward beacon one
-                    m3.setPower(0); //Sets motor 3 to power 0 to go diagonally toward beacon one
-                    m4.setPower(1); //Sets motor 4 to power 1 to go diagonally toward beacon one
-                    break; //Exits switch statement
-                } //End of if statement
-                if (gyro.getIntegratedZValue() > 0) { //If gyro senses a tilt, it lowers the speed of motor 4 to correct itself
-                    m1.setPower(1); //Sets motor 1 to power 1 to go diagonally toward beacon one
-                    m2.setPower(0); //Sets motor 2 to power 0 to go diagonally toward beacon one
-                    m3.setPower(0); //Sets motor 3 to power 0 to go diagonally toward beacon one
-                    m4.setPower(.8); //Sets motor 4 to power .8 to go diagonally toward beacon one
-                    break; //Exits switch statement
-                } //End of if statement
-                if (gyro.getIntegratedZValue() == 0) { //If gyro senses no tilt, it will continue to move at full power with both motors 1 and 4
-                    m1.setPower(1); //Sets motor 1 to power 1 to go diagonally toward beacon one
-                    m2.setPower(0); //Sets motor 2 to power 0 to go diagonally toward beacon one
-                    m3.setPower(0); //Sets motor 3 to power 0 to go diagonally toward beacon one
-                    m4.setPower(1); //Sets motor 4 to power 1 to go diagonally toward beacon one
-                    break; //Exits switch statement
-                } //End of if statement
-
-            case ROTATE:
-
-                if (gyro.getIntegratedZValue() > -80) {
-                    m1.setPower(0);
-                    m2.setPower(0);
-                    m3.setPower(0);
-                    m4.setPower(0);
-                    runtime.reset(); //Resets time before switching to next step
-                    CURRENT_STEP = steps.WAIT_CROSS; //Sets next step to STOP
-                    break; //Exits switch statement
-                }
-                m1.setPower(.2); //Sets motor 1 to power .5 to move the robot toward the center vortex
-                m2.setPower(-.2); //Sets motor 2 to power -.5 to move the robot toward the center vortex
-                m3.setPower(.2); //Sets motor 3 to power -.5 to move the robot toward the center vortex
-                m4.setPower(-.2); //Sets motor 4 to power .5 to move the robot toward the center vortex
-                break;
-
-            case WAIT_CROSS:
-
-                if (matchRuntime.seconds() > 10) {
-                    m1.setPower(0);
-                    m2.setPower(0);
-                    m3.setPower(0);
-                    m4.setPower(0);
-                    runtime.reset(); //Resets time before switching to next step
-                    CURRENT_STEP = steps.DRIVE_TO_WALL; //Sets next step to STOP
-                    break; //Exits switch statement
-                }
-                m1.setPower(0);
-                m2.setPower(0);
-                m3.setPower(0);
-                m4.setPower(0);
-                break;
-
-            case DRIVE_TO_WALL:
-
-                if (range.getDistance(DistanceUnit.CM) < 30) {
-                    m1.setPower(0);
-                    m2.setPower(0);
-                    m3.setPower(0);
-                    m4.setPower(0);
-                    runtime.reset(); //Resets time before switching to next step
-                    CURRENT_STEP = steps.WAIT_PARK; //Sets next step to STOP
-                    break; //Exits switch statement
-                }
-                if (gyro.getIntegratedZValue() < -90) { //If gyro senses a tilt, it lowers the speed of motor 1 and motor 2 to correct itself
-                    m1.setPower(.5); //Sets motor 1 to power .25 to go right and look for the beacon two white line
-                    m2.setPower(-.4); //Sets motor 2 to power -.25 to go right and look for the beacon two white line
-                    m3.setPower(-.5); //Sets motor 3 to power -.35 to go right and look for the beacon two white line
-                    m4.setPower(.4); //Sets motor 4 to power .35 to go right and look for the beacon two white line
-                    break; //Exits switch statement
-                } //End of if statement
-                if (gyro.getIntegratedZValue() > -90) { //If gyro senses a tilt, it lowers the speed of motor 3 and motor 4 to correct itself
-                    m1.setPower(.4); //Sets motor 1 to power .35 to go right and look for the beacon two white line
-                    m2.setPower(-.5); //Sets motor 2 to power -.35 to go right and look for the beacon two white line
-                    m3.setPower(-.4); //Sets motor 3 to power -.25 to go right and look for the beacon two white line
-                    m4.setPower(.5); //Sets motor 4 to power .25 to go right and look for the beacon two white line
-                    break; //Exits switch statement
-                } //End of if statement
-                if (gyro.getIntegratedZValue() == -90) { //If gyro senses no tilt, it continues to go right with all drive train motors set to a power of .35
-                    m1.setPower(.5); //Sets motor 1 to power .35 to go right and look for the beacon two white line
-                    m2.setPower(-.5); //Sets motor 2 to power -.35 to go right and look for the beacon two white line
-                    m3.setPower(-.5); //Sets motor 3 to power -.35 to go right and look for the beacon two white line
-                    m4.setPower(.5); //Sets motor 4 to power .35 to go right and look for the beacon two white line
-                    break; //Exits switch statement
-                } //End of if statement.
-                break; //Exits switch statement
-
             case WAIT_PARK:
 
-                if (matchRuntime.seconds() > 27) {
-                    m1.setPower(0);
-                    m2.setPower(0);
-                    m3.setPower(0);
-                    m4.setPower(0);
+                if(matchRuntime.seconds() > 27) {
+                    m1.setPower(0); //Sets motor 1 to power 0 before next step
+                    m2.setPower(0); //Sets motor 2 to power 0 before next step
+                    m3.setPower(0); //Sets motor 3 to power 0 before next step
+                    m4.setPower(0); //Sets motor 4 to power 0 before next step
                     runtime.reset(); //Resets time before switching to next step
-                    CURRENT_STEP = steps.DRIVE_TO_WALL; //Sets next step to STOP
-                    break; //Exits switch statement
-                }
-                m1.setPower(0);
-                m2.setPower(0);
-                m3.setPower(0);
-                m4.setPower(0);
-                break;
-
-            case PARK:
-
-                if (range.getDistance(DistanceUnit.CM) < 30) {
-                    m1.setPower(0);
-                    m2.setPower(0);
-                    m3.setPower(0);
-                    m4.setPower(0);
-                    runtime.reset(); //Resets time before switching to next step
-                    CURRENT_STEP = steps.WAIT_PARK; //Sets next step to STOP
-                    break; //Exits switch statement
-                }
-                if (gyro.getIntegratedZValue() < 90) { //If gyro senses a tilt, it lowers the speed of motor 1 and motor 2 to correct itself
-                    m1.setPower(-.5); //Sets motor 1 to power .25 to go right and look for the beacon two white line
-                    m2.setPower(.4); //Sets motor 2 to power -.25 to go right and look for the beacon two white line
-                    m3.setPower(.5); //Sets motor 3 to power -.35 to go right and look for the beacon two white line
-                    m4.setPower(-.4); //Sets motor 4 to power .35 to go right and look for the beacon two white line
+                    CURRENT_STEP = steps.DRIVE_TO_CAP_BALL; //Sets next step to LOWER_SERVO_2
                     break; //Exits switch statement
                 } //End of if statement
-                if (gyro.getIntegratedZValue() > 90) { //If gyro senses a tilt, it lowers the speed of motor 3 and motor 4 to correct itself
-                    m1.setPower(-.4); //Sets motor 1 to power .35 to go right and look for the beacon two white line
-                    m2.setPower(.5); //Sets motor 2 to power -.35 to go right and look for the beacon two white line
-                    m3.setPower(.4); //Sets motor 3 to power -.25 to go right and look for the beacon two white line
-                    m4.setPower(-.5); //Sets motor 4 to power .25 to go right and look for the beacon two white line
-                    break; //Exits switch statement
-                } //End of if statement
-                if (gyro.getIntegratedZValue() == 90) { //If gyro senses no tilt, it continues to go right with all drive train motors set to a power of .35
-                    m1.setPower(-.5); //Sets motor 1 to power .35 to go right and look for the beacon two white line
-                    m2.setPower(.5); //Sets motor 2 to power -.35 to go right and look for the beacon two white line
-                    m3.setPower(.5); //Sets motor 3 to power -.35 to go right and look for the beacon two white line
-                    m4.setPower(-.5); //Sets motor 4 to power .35 to go right and look for the beacon two white line
-                    break; //Exits switch statement
-                } //End of if statement.
+                m1.setPower(0); //Sets motor 1 power to 0 to make sure it is not moving
+                m2.setPower(0); //Sets motor 2 power to 0 to make sure it is not moving
+                m3.setPower(0); //Sets motor 3 power to 0 to make sure it is not moving
+                m4.setPower(0); //Sets motor 4 power to 0 to make sure it is not moving
+                m5.setPower(0); //Sets motor 5 power to 0 to make sure it is not moving
+                m6.setPower(0); //Sets motor 6 power to 0 to make sure it is not moving
+                m7.setPower(0); //Sets motor 7 power to 0 to make sure it is not moving
+                m8.setPower(0); //Sets motor 8 power to 0 to make sure it is not moving
                 break; //Exits switch statement
+
+            case DRIVE_TO_CAP_BALL:
+
+                if (runtime.seconds() > 2) { //Raises ball into launcher by setting servo position to launching position for 1 second
+                    m1.setPower(0); //Sets motor 1 to power 0 before next step
+                    m2.setPower(0); //Sets motor 2 to power 0 before next step
+                    m3.setPower(0); //Sets motor 3 to power 0 before next step
+                    m4.setPower(0); //Sets motor 4 to power 0 before next step
+                    runtime.reset(); //Resets time before switching to next step
+                    CURRENT_STEP = steps.STOP; //Sets next step to LOWER_SERVO_2
+                    break; //Exits switch statement
+                } //End of if statement
 
             case STOP: //Beginning of the case statement STOP
 
