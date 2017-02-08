@@ -91,7 +91,7 @@ public class Teleop2017 extends TardisOpMode { //Init code in separate program
         linearCurr = gamepad2.x;
 
         //Check for button state transitions.
-        if ((linearCurr == true) && (linearCurr != linearPrev)) {
+        if ((linearCurr) && (linearCurr != linearPrev)) {
 
             //Sweeper transitioning to toggled state
             linearExt = !linearExt;
