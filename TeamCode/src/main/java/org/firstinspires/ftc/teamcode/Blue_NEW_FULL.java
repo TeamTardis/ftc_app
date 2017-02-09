@@ -102,7 +102,7 @@ public class Blue_NEW_FULL extends TardisOpModeAutonomous { //Imports presets fo
         //Telemetry for debugging//
         ///////////////////////////
 
-        telemetry.addData("", "Range (CM): " + range.getDistance(DistanceUnit.CM) + "\nzValue: " + gyro.getIntegratedZValue() + "\nRed: " + colorSensor.blue() + "\nRuntime variable: " + runtime + "\nStep: " + CURRENT_STEP); //Adds telemetry to debug
+        telemetry.addData("", "Range (CM): " + range.getDistance(DistanceUnit.CM) + "\nzValue: " + gyro.getIntegratedZValue() + "\nRed: " + colorSensor.blue() + "\nODsensor" + odsSensor1.getRawLightDetected() + "\nRuntime variable: " + runtime + "\nStep: " + CURRENT_STEP); //Adds telemetry to debug
         telemetry.update(); //Updates telemetry with new information
 
         /////////////////////////////
@@ -268,7 +268,7 @@ public class Blue_NEW_FULL extends TardisOpModeAutonomous { //Imports presets fo
 
             case DRIVE_TO_FIRST_BEACON_TWO: //Beginning of case statement DRIVE_TO_FIRST_BEACON
 
-                if (odsSensor1.getRawLightDetected() > .5) { //Moves diagonally towards first beacon and stops when ODS scenes a white line
+                if (odsSensor1.getRawLightDetected() > .35) { //Moves diagonally towards first beacon and stops when ODS scenes a white line
                     m1.setPower(0); //Sets motor 1 to power 0 before next step
                     m2.setPower(0); //Sets motor 2 to power 0 before next step
                     m3.setPower(0); //Sets motor 3 to power 0 before next step
@@ -542,7 +542,7 @@ public class Blue_NEW_FULL extends TardisOpModeAutonomous { //Imports presets fo
 
             case NEXT_BEACON_STEP_TWO: //Beginning of case statement NEXT_BEACON_STEP_TWO
 
-                if (odsSensor1.getRawLightDetected() > .5) { //Moves right until next white line is found
+                if (odsSensor1.getRawLightDetected() > .35) { //Moves right until next white line is found
                     m1.setPower(0); //Sets motor 1 to power 0 before next step
                     m2.setPower(0); //Sets motor 2 to power 0 before next step
                     m3.setPower(0); //Sets motor 3 to power 0 before next step

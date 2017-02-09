@@ -44,8 +44,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit; //Impor
  White line - The white tape on the floor perpendicular to a beacon.
  **/
 
-@Autonomous(name = "RED", group = "AutoFast") //Display name and group found in on controller phone
-public class Red_NEW_FULL extends TardisOpModeAutonomous { //Imports presets for initiation from TardisOpModeAutonomous
+@Autonomous(name = "RED_ONE_BAL", group = "AutoFast") //Display name and group found in on controller phone
+public class Red_FULL_ONE_BALL extends TardisOpModeAutonomous { //Imports presets for initiation from TardisOpModeAutonomous
 
     public enum steps { //All steps for completing autonomous
 
@@ -58,31 +58,26 @@ public class Red_NEW_FULL extends TardisOpModeAutonomous { //Imports presets for
         MOVE_AWAY_FROM_WALL, //[Step 1] Moves away from starting wall to prepare for rotation
         ROTATE_TO_VORTEX, //[Step 2] Rotate about 50° counter-clockwise to face launcher at center vortex
         SHOOT_FIRST_BALL, //[Step 4] Shoot first ball by lifting ball using launching servo
-        LOWER_SERVO_1, //[Step 5] Lowers launching servo (resets it to original position)
-        WAIT,
-        MOTORS_OFF,
-        MOTORS_ON,
-        SHOOT_SECOND_BALL, //[Step 6] Shoot second ball by lifting ball using launching servo
         ROTATE_BACK, //[Step 8] Rotates back 50° clockwise to face button pusher towards beacon- this step also sets the launcher's motors to power 0 for power conservation
         FORWARD,
         STRAIGHTEN_ON_WALL, //[Step 9] Pushes against starting wall as backup
         DRIVE_TO_FIRST_BEACON, //[Step 10] Drive diagonally using motor 2, motor 3, and gyro sensor until the beacon one white line is detected
-            DRIVE_TO_FIRST_BEACON_TWO, //[Step 10] Drive diagonally using motor 2, motor 3, and gyro sensor until the beacon one white line is detected
+        DRIVE_TO_FIRST_BEACON_TWO, //[Step 10] Drive diagonally using motor 2, motor 3, and gyro sensor until the beacon one white line is detected
         FIND_WHITE_LINE_BEACON_ONE, //[Step 11] Move off white line to right side of the beacon to prepare for scanning of correct color
         MOVE_CLOSER_TO_BEACON_ONE, //[Step 12] Use the range sensor to move the correct distance away from the wall
         FIND_CORRECT_COLOR_BEACON_ONE, //[Step 13] Drive right to locate and stop at correct color while scanning beacon
         PUSH_BUTTON_BEACON_ONE, //[Step 14] Once correct color is found, drive forward to select color
-            BACK_BEACON_ONE,
-            SECOND_PUSH_BEACON_ONE,
+        BACK_BEACON_ONE,
+        SECOND_PUSH_BEACON_ONE,
         BACK_OFF_BEACON_ONE, //[Step 15] After button press, drive backward
         NEXT_BEACON_STEP_ONE, //[Step 16] Moves right to get off white line to prepare to look for the beacon two white line
-            NEXT_BEACON_STEP_TWO, //[Step 17] Using gyro for stabilization, begin to start scan for the beacon two white line
+        NEXT_BEACON_STEP_TWO, //[Step 17] Using gyro for stabilization, begin to start scan for the beacon two white line
         DRIVE_OFF_WHITE_LINE_BEACON_TWO, //[Step 18] Move off white line to left side of the beacon to prepare to scan for correct color
         MOVE_CLOSER_TO_BEACON_TWO, //[Step 19] Use the range sensor to move the correct distance away from the wall
         FIND_CORRECT_COLOR_BEACON_TWO, //[Step 20] Drive right to locate and stop at correct color while scanning beacon
         PUSH_BUTTON_BEACON_TWO, //[Step 21] Once correct color is found, drive forward to select color
-             BACK_BEACON_TWO,
-             SECOND_PUSH_BEACON_TWO,
+        BACK_BEACON_TWO,
+        SECOND_PUSH_BEACON_TWO,
         BACK_OFF_BEACON_TWO, //[Step 22] After button press, drive backward
         HIT_CAP_BALL, //[Step 23] Drive diagonally backward using motor 1, motor 4 and gyro sensor to hit cap ball off the base of the center vortex and park there
         ROTATE_CAP_BALL,
@@ -196,53 +191,12 @@ public class Red_NEW_FULL extends TardisOpModeAutonomous { //Imports presets for
                     m5.setPower(1); //Set launcher motor 5 to .1 for prep
                     m6.setPower(1); //Set launcher motor 6 to .1 for prep
                     runtime.reset(); //Resets time before switching to next step
-                    CURRENT_STEP = steps.LOWER_SERVO_1; //Sets next step to LOWER_SERVO_1
+                    CURRENT_STEP = steps.ROTATE_BACK; //Sets next step to LOWER_SERVO_1
                     break; //Exits switch statement
                 } //End of if statement
                 s2.setPosition(1); //Sets launching servo to launching position
                 break; //Exits switch statement
 
-            //////////////////////////
-            //Step 5 [LOWER_SERVO_1]//
-            //////////////////////////
-
-            case LOWER_SERVO_1: //Beginning of case statement LOWER_SERVO_1
-
-                if (runtime.seconds() > 3) { //Lowers launching servo to original position for 1.5 seconds
-                    m1.setPower(0); //Sets motor 1 to power 0 before next step
-                    m2.setPower(0); //Sets motor 2 to power 0 before next step
-                    m3.setPower(0); //Sets motor 3 to power 0 before next step
-                    m4.setPower(0); //Sets motor 4 to power 0 before next step
-                    m5.setPower(1); //Set launcher motor 5 to .1 for prep
-                    m6.setPower(1); //Set launcher motor 6 to .1 for prep
-                    runtime.reset(); //Resets time before switching to next step
-                    CURRENT_STEP = steps.SHOOT_SECOND_BALL; //Sets next step to SHOOT_SECOND_BALL
-                    break; //Exits switch statement
-                } //End of if statement
-                s2.setPosition(.05); //Sets launching servo to original position
-                m7.setPower(-1);
-                break; //Exits switch statement
-
-            //////////////////////////////
-            //Step 6 [SHOOT_SECOND_BALL]//
-            //////////////////////////////
-
-            case SHOOT_SECOND_BALL: //Beginning of case statement SHOOT_SECOND_BALL
-
-                if (runtime.seconds() > .6) { //Raises ball into launcher by setting servo position to launching position for 1 second
-                    m1.setPower(0); //Sets motor 1 to power 0 before next step
-                    m2.setPower(0); //Sets motor 2 to power 0 before next step
-                    m3.setPower(0); //Sets motor 3 to power 0 before next step
-                    m4.setPower(0); //Sets motor 4 to power 0 before next step
-                    m5.setPower(1); //Set launcher motor 5 to .1 for prep
-                    m6.setPower(1); //Set launcher motor 6 to .1 for prep
-                    m7.setPower(-1);
-                    runtime.reset(); //Resets time before switching to next step
-                    CURRENT_STEP = steps.ROTATE_BACK; //Sets next step to LOWER_SERVO_2
-                    break; //Exits switch statement
-                } //End of if statement
-                s2.setPosition(1); //Sets launching servo to launching position
-                break; //Exits switch statement
 
             case ROTATE_BACK: //Beginning of case statement ROTATE_BACK
 
@@ -408,9 +362,9 @@ public class Red_NEW_FULL extends TardisOpModeAutonomous { //Imports presets for
                     break;
                 } //End of if statement
 
-            ////////////////////////////////////
-            //Step 14 [PUSH_BUTTON_BEACON_ONE]//
-            ////////////////////////////////////
+                ////////////////////////////////////
+                //Step 14 [PUSH_BUTTON_BEACON_ONE]//
+                ////////////////////////////////////
 
             case PUSH_BUTTON_BEACON_ONE: //Beginning of case statement PUSH_BUTTON_BEACON_ONE
 
