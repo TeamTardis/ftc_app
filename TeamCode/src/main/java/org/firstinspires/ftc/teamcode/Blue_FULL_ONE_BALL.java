@@ -404,7 +404,7 @@ public class Blue_FULL_ONE_BALL extends TardisOpModeAutonomous { //Imports prese
 
             case SECOND_PUSH_BEACON_ONE: //Beginning of case statement PUSH_BUTTON_BEACON_ONE
 
-                if (runtime.seconds() > .4) { //Moves forward to push button for 1 seconds
+                if (runtime.seconds() > .6) { //Moves forward to push button for 1 seconds
                     m1.setPower(0); //Sets motor 1 to power 0 before next step
                     m2.setPower(0); //Sets motor 2 to power 0 before next step
                     m3.setPower(0); //Sets motor 3 to power 0 before next step
@@ -665,7 +665,7 @@ public class Blue_FULL_ONE_BALL extends TardisOpModeAutonomous { //Imports prese
 
             case SECOND_PUSH_BEACON_TWO: //Beginning of case statement PUSH_BUTTON_BEACON_ONE
 
-                if (runtime.seconds() > .4) { //Moves forward to push button for 1 seconds
+                if (runtime.seconds() > .6) { //Moves forward to push button for 1 seconds
                     m1.setPower(0); //Sets motor 1 to power 0 before next step
                     m2.setPower(0); //Sets motor 2 to power 0 before next step
                     m3.setPower(0); //Sets motor 3 to power 0 before next step

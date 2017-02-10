@@ -50,8 +50,8 @@ public abstract class TardisOpModeAutonomous extends OpMode { //Imports presets 
         m6 = hardwareMap.dcMotor.get("m6"); //Sets m6 to m6 in the config
         m7 = hardwareMap.dcMotor.get("m7"); //Sets m7 to m7 in the config
         m8 = hardwareMap.dcMotor.get("m8"); //Sets m8 to m8 in the config
-        m2.setDirection(DcMotor.Direction.REVERSE); //Reverses direction of m2
-        m4.setDirection(DcMotor.Direction.REVERSE); //Reverses direction of m4
+        m1.setDirection(DcMotor.Direction.REVERSE); //Reverses direction of m1
+        m3.setDirection(DcMotor.Direction.REVERSE); //Reverses direction of m3
 
         m5.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //Sets mode of m5 to run with encoder
         m6.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //Sets mode of m6 to run with encoder
